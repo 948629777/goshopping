@@ -11,4 +11,4 @@ module.exports = defineConfig({
     }
 })
 //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
-// git remote set-url origin https://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@github.com/948629777/goshopping.git
+// git remote set-url origin https://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91@github.com/948629777/goshopping.git
