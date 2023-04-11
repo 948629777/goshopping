@@ -1,7 +1,6 @@
 <template>
   <div class="login-container">
     <!-- 登录 -->
-    <input type="text" v-model="code">
     <div class="login-wrap">
       <div class="login">
         <div class="loginform">
@@ -18,11 +17,11 @@
             <form action="##">
               <div class="input-text clearFix">
                 <span></span>
-                <input type="text" placeholder="邮箱/用户名/手机号">
+                <input type="text" placeholder="邮箱/用户名/手机号" v-model.number.lazy="loginForm.phone">
               </div>
               <div class="input-text clearFix">
                 <span class="pwd"></span>
-                <input type="text" placeholder="请输入密码">
+                <input type="text" placeholder="请输入密码" v-model.trim.lazy="loginForm.password">
               </div>
               <div class="setting clearFix">
                 <label class="checkbox inline">
@@ -31,7 +30,7 @@
                 </label>
                 <span class="forget">忘记密码？</span>
               </div>
-              <button class="btn" @click="postUser">登&nbsp;&nbsp;录</button>
+              <button class="btn" @click.prevent.enter="sendLogin">登&nbsp;&nbsp;录</button>
             </form>
 
             <div class="call clearFix">
@@ -71,30 +70,32 @@
     name: 'Login',
     data(){
       return {
-        code:''
+        code:'',
+        loginForm:{
+          phone:'',
+          password:'',
+        }
       }
     },
     mounted(){
-      this.$axios({
-        method:'get',
-        url:'/api/user/passport/code'
-      }).then(res=>{
-        console.log(res);
-      })
+      
     },
     methods:{
-      postUser(){
+      sendLogin(){
         this.$axios({
-        method:'post',
-        url:'/api/user/passport/register',
-        params:{
-          phone:'17667176552',
-          password:'123456',
-          code:this.code
-        }
-      }).then((res)=>{
-        console.log(res);
-      })
+          method:'post',
+          url:'/api/user/passport/login',
+          data:this.loginForm
+        }).then(res=>{
+          if(res.data.code==200){
+            this.$message.success('登陆成功,即将跳转到首页')
+            localStorage.setItem('token',res.data.data.token)
+            this.$router.push('/')
+          }else{
+            this.$message.error(res.data.message)
+          }
+
+        })
       }
     }
   }

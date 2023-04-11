@@ -12,6 +12,8 @@ import 'element-ui/lib/theme-chalk/index.css';
 Vue.use(ElementUI);
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
+// 配置请求头信息
+axios.defaults.headers['token'] = localStorage.getItem('token')
 
 new Vue({
   router,
