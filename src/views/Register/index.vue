@@ -3,7 +3,7 @@
     <!-- 注册内容 -->
     <div class="register">
       <h3>注册新用户
-        <span class="go">我有账号，去 <a href="login.html" target="_blank">登陆</a>
+        <span class="go">我有账号，去 <a href="#/login" target="_parent">登陆</a>
         </span>
       </h3>
       <div class="content">
@@ -238,22 +238,6 @@
           color: #fff !important;
           display: inline-block;
           font-size: 16px;
-        }
-      }
-    }
-
-    .copyright {
-      width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      line-height: 24px;
-
-      ul {
-        li {
-          display: inline-block;
-          border-right: 1px solid #e4e4e4;
-          padding: 0 20px;
-          margin: 15px 0;
         }
       }
     }

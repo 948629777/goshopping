@@ -115,19 +115,31 @@
 </template>
 
 <script>
-import '../../../../assets/swiper.min.css'
-import Swiper from 'swiper'
 export default {
 	name: 'ListContainer',
 	mounted() {
-		new Swiper('.swiper-container', {
+		var mySwiper = new Swiper('.swiper-container', {
+			loop: true,
+			pagination: {
+				el: '.swiper-pagination',
+        clickable:true,
+			},
 			autoplay: {
-    delay: 3000,
-    stopOnLastSlide: false,
-    disableOnInteraction: true,
-    },
-    loop: true,
+				delay: 3000,
+				stopOnLastSlide: false,
+				disableOnInteraction: false,
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
 		})
+		mySwiper.el.onmouseover = function () {
+			mySwiper.autoplay.stop()
+		}
+		mySwiper.el.onmouseout = function () {
+			mySwiper.autoplay.start()
+		}
 	},
 }
 </script>
@@ -179,7 +191,7 @@ export default {
 				.news-list {
 					padding: 5px 15px;
 					line-height: 26px;
-
+          font-size: 12px;
 					.bold {
 						font-weight: 700;
 					}
@@ -191,7 +203,7 @@ export default {
 				overflow: hidden;
 				display: flex;
 				flex-wrap: wrap;
-
+        padding: 0;
 				.life-item {
 					border-left: 1px solid #e4e4e4;
 					border-bottom: 1px solid #e4e4e4;

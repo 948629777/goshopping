@@ -3,8 +3,6 @@ import VueRouter from 'vue-router'
 import login from '../views/Login/index.vue'
 import register from '../views/Register/index.vue'
 import home from '../views/home/Home'
-import typeNav from '../views/home/TypeNav'
-
 Vue.use(VueRouter)
 
 const routes = [
@@ -15,7 +13,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
 })
 
 export default router

@@ -90,7 +90,10 @@
           if(res.data.code==200){
             this.$message.success('登陆成功,即将跳转到首页')
             localStorage.setItem('token',res.data.data.token)
-            this.$router.push('/')
+            sessionStorage.setItem('userName',this.loginForm.phone)
+            setTimeout(()=>{
+              this.$router.push('/')
+            },1500)
           }else{
             this.$message.error(res.data.message)
           }
@@ -255,22 +258,5 @@
         }
       }
     }
-
-    .copyright {
-      width: 1200px;
-      margin: 0 auto;
-      text-align: center;
-      line-height: 24px;
-
-      ul {
-        li {
-          display: inline-block;
-          border-right: 1px solid #e4e4e4;
-          padding: 0 20px;
-          margin: 15px 0;
-        }
-      }
-    }
-
   }
 </style>
