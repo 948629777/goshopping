@@ -36,7 +36,7 @@
         <button>完成注册</button>
       </div>
     </div>
-
+<!--  -->
     <!-- 底部 -->
     <div class="copyright">
       <ul>
