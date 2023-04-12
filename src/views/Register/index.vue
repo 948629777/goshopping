@@ -85,7 +85,7 @@
             this.$router.push('/login')
           },2000)
         }else{
-          this.$message,error(res.data.message)
+          this.$message,error('注册失败，请核对填写的信息')
         }
       })
       },
