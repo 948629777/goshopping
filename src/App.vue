@@ -8,4 +8,11 @@
   ul{
     list-style: none;
   }
+  a{
+    text-decoration: none;
+  }
+  a:hover{
+    color: red;
+  }
+ 
 </style>

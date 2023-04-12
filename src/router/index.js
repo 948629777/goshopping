@@ -2,13 +2,16 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import login from '../views/Login/index.vue'
 import register from '../views/Register/index.vue'
+import home from '../views/home/Home'
+import typeNav from '../views/home/TypeNav'
 
 Vue.use(VueRouter)
 
 const routes = [
-  {path:'/',redirect:'/login'},
+  {path:'/',redirect:'/shopping'},
   {path:'/login',component:login},
-  {path:'/register',component:register}
+  {path:'/register',component:register},
+  {path:'/shopping',component:home}
 ]
 
 const router = new VueRouter({
