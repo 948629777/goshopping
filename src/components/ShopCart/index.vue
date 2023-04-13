@@ -11,6 +11,7 @@
         <div class="cart-th6">操作</div>
       </div>
       <div class="cart-body">
+        <p v-if="goodsList[0]">空空如也</p>
         <ul class="cart-list" v-for="item in goodsList" :key="item.id">
           <li class="cart-list-con1">
             <input type="checkbox" name="chk_list" v-model="item.isChecked" @click="checkout($event,item.skuId)">
@@ -26,13 +27,13 @@
             <span class="price">{{ item.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <el-input-number v-model="item.skuNum" size="mini" :min="1" :max="10" label="描述文字"></el-input-number>
+            <el-input-number v-model="item.skuNum" size="mini" :min="1" :max="10" label="描述文字" @blur="editGoods(item.skuId,item.skuNum)"></el-input-number>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuNum*item.skuPrice }}</span>
           </li>
           <li class="cart-list-con7">
-            <a href="#none" class="sindelet" @click.prevent="remove(item.id)">删除</a>
+            <a href="#none" class="sindelet" @click.prevent="removeGoods(item.skuId)">删除</a>
             <br>
             <a href="#none" @click.prevent="$message.success('收藏成功')">移到收藏</a>
           </li>
@@ -66,9 +67,9 @@
   title="提示"
   :visible.sync="payVisible"
   width="30%"
-  :before-close="handleClose">
+  :close="handleClose">
   <img src="../../images/erweima.gif" width="100%" alt="">
-  <span>支付{{ goodsSum }}元</span>
+  <span>即将支付{{ priceSum }}元</span>
 </el-dialog>
 
   </div>
@@ -86,6 +87,15 @@
       }
     },
     methods:{
+      getCarList(){
+        this.$axios({
+        method:'get',
+        url:'/api/cart/cartList'
+      }).then(res=>{
+        this.goodsList = res.data.data[0].cartInfoList
+        console.log(this.goodsList);
+      })
+      },
       allCheck(e){
         this.goodsList.forEach(item=>{
           item.isChecked = e.target.checked?1:0
@@ -100,12 +110,49 @@
             method:'get',
             url:`/api/cart/checkCart/${id}/${e.target.checked?'1':'0'}`
           }).then(res=>{
-            console.log(res);
+              this.timer=undefined
+            if(res.data.code===200){
+              this.$message.success('切换成功')
+            }else{
+              this.$message.error(res.data.message)
+            }
           })
         },1500)
       },
-      pay(){
-
+      handleClose(){
+        // 支付框关闭
+      },
+      removeGoods(id){
+        this.$confirm('此操作将永久删除该商品, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios({
+            method:'delete',
+            url:'/api/cart/deleteCart/'+id+''
+          }).then(res=>{
+            if(res.data.code===200){
+              this.$message.success('删除成功')
+              this.getCarList()
+            }else{
+              this.$message.error(res.data.message)
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
+      },
+      editGoods(id,num){
+        this.$axios({
+          method:'post',
+          url:`/api/cart/addToCart/${id}/${num}`
+        }).then(res=>{
+          console.log(res);
+        })
       }
     },
     computed:{
@@ -142,13 +189,7 @@
       }
     },
     mounted(){
-      this.$axios({
-        method:'get',
-        url:'/api/cart/cartList'
-      }).then(res=>{
-        this.goodsList = res.data.data[0].cartInfoList
-        console.log(this.goodsList);
-      })
+      this.getCarList()
     }
   }
 </script>
