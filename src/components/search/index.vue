@@ -12,9 +12,6 @@
           </ul>
           <ul class="fl sui-tag">
             <li class="with-x">{{ searchForm.keyword }}</li>
-            <!-- <li class="with-x">iphone<i>×</i></li>
-            <li class="with-x">华为<i>×</i></li>
-            <li class="with-x">OPPO<i>×</i></li> -->
           </ul>
         </div>
 
@@ -49,14 +46,14 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id">
+              <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id" @click.prevent.stop="toCar(item.id)">
                 <div class="list-wrap">
                   <div class="p-img">
-                    <a href="item.html" target="_blank"><img :src="item.defaultImg" /></a>
+                    <a href="item.html" target="_parent"><img :src="item.defaultImg" /></a>
                   </div>
                   <div class="price">
                     <strong>
-                      <em>¥</em>
+                      <em>¥&nbsp;&nbsp;&nbsp;</em>
                       <i>{{ item.price }}</i>
                     </strong>
                   </div>
@@ -67,7 +64,7 @@
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a href="success-cart.html" target="_blank" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="###" @click.prevent="toCar(item.id)" target="_parent" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>
@@ -143,6 +140,17 @@
       handleCurrentChange(e){
         this.searchForm.pageNo = e
         this.getData()
+      },
+      toCar(e){
+        this.$router.push('/detail/'+e+'')
+        // this.$axios({
+        //   method:'post',
+        //   url:'/api/cart/addToCart/20/1'
+        // }).then(res=>{
+        //   if(res.data.code==200){
+        //     this.$message.success('添加商品成功')
+        //   }
+        // })
       }
     },
     watch:{

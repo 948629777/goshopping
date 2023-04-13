@@ -1,8 +1,8 @@
 <template>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <img src="../images/s1.png">
+      <div class="swiper-slide" v-for="item in info.skuImageList" :key="item.id" @click="sendUrl(item.imgUrl)">
+        <img :src="item.imgUrl">
       </div>
     </div>
     <div class="swiper-button-next"></div>
@@ -15,6 +15,26 @@
   import Swiper from 'swiper'
   export default {
     name: "ImageList",
+    props:['info'],
+    mounted(){
+      var mySwiper = new Swiper('.swiper-container', {
+			loop: true,
+			autoplay: {
+				delay: 3000,
+				stopOnLastSlide: false,
+				disableOnInteraction: false,
+			},
+			navigation: {
+				nextEl: '.swiper-button-next',
+				prevEl: '.swiper-button-prev',
+			},
+		})
+    },
+    methods:{
+      sendUrl(e){
+        this.$emit('sendurl',e)
+      }
+    }
   }
 </script>
 
@@ -26,8 +46,8 @@
     padding: 0 12px;
 
     .swiper-slide {
-      // width: 56px;
-      // height: 56px;
+      width: 56px!important;
+      height: 56px;
 
       img {
         width: 100%;

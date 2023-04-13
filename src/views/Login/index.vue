@@ -89,7 +89,7 @@
         }).then(res=>{
           if(res.data.code==200){
             this.$message.success('登陆成功,即将跳转到首页')
-            localStorage.setItem('token',res.data.data.token)
+            sessionStorage.setItem('token',res.data.data.token)
             sessionStorage.setItem('userName',this.loginForm.phone)
             setTimeout(()=>{
               this.$router.push('/')

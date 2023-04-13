@@ -60,7 +60,6 @@ export default {
         url:'/api/product/getBaseCategoryList'
       }).then(res=>{
         this.navList=res.data.data
-        console.log(res.data.data);
       })
       var nav = document.querySelector('.all'),content = document.querySelector('.sort')
       nav.addEventListener('mouseenter',function(){

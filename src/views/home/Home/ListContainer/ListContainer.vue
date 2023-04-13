@@ -122,25 +122,31 @@ export default {
 			loop: true,
 			pagination: {
 				el: '.swiper-pagination',
-        clickable:true,
+        		clickable:true,
 			},
 			autoplay: {
 				delay: 3000,
 				stopOnLastSlide: false,
 				disableOnInteraction: false,
+				pauseOnMouseEnter: true,
 			},
 			navigation: {
 				nextEl: '.swiper-button-next',
 				prevEl: '.swiper-button-prev',
 			},
 		})
-		mySwiper.el.onmouseover = function () {
-			mySwiper.autoplay.stop()
-		}
-		mySwiper.el.onmouseout = function () {
-			mySwiper.autoplay.start()
-		}
-	},
+		// var stopel = document.querySelector('.swiper-container')
+		// stopel.onmouseover = function () {
+		// 	mySwiper.autoplay.stop()
+		// }
+		// stopel.onmouseout = function () {
+		// 	mySwiper.autoplay.start()
+		// }
+	}/* ,
+	beforeDestroy(){
+		mySwiper.el.removeEventListener('mouseover')
+		mySwiper.el.removeEventListener('mouseout')
+	} */
 }
 </script>
 

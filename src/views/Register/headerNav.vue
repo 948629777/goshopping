@@ -39,7 +39,7 @@
 					<div class="searchArea">
 						<form action="###" class="searchForm">
 							<input type="text" id="autocomplete" class="input-error input-xxlarge" v-model.trim="keyword"/>
-							<button class="sui-btn btn-xlarge btn-danger" type="button" @click="searchGoods">搜索</button>
+							<button class="sui-btn btn-xlarge btn-danger" type="button" @click.prevent="searchGoods">搜索</button>
 						</form>
 					</div>
 				</div>
@@ -74,15 +74,6 @@
             if(sessionStorage.getItem('userName')){
                 this.$store.commit('isLogin')
             }
-			/* this.$axios({
-        method:'post',
-        url:'/api/list',
-		data:{
-			keyword:this.keyword
-		}
-      }).then(res=>{
-        console.log(res.data.data);
-      }) */
         }
     }
 </script>
