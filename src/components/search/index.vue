@@ -143,14 +143,6 @@
       },
       toCar(e){
         this.$router.push('/detail/'+e+'')
-        // this.$axios({
-        //   method:'post',
-        //   url:'/api/cart/addToCart/20/1'
-        // }).then(res=>{
-        //   if(res.data.code==200){
-        //     this.$message.success('添加商品成功')
-        //   }
-        // })
       }
     },
     watch:{
@@ -304,7 +296,7 @@
                     color: #666;
 
                     img {
-                      max-width: 100%;
+                      width: 100%;
                       height: auto;
                       vertical-align: middle;
                     }

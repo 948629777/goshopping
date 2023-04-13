@@ -38,8 +38,9 @@
 					</h1>
 					<div class="searchArea">
 						<form action="###" class="searchForm">
-							<input type="text" id="autocomplete" class="input-error input-xxlarge" v-model.trim="keyword"/>
-							<button class="sui-btn btn-xlarge btn-danger" type="button" @click.prevent="searchGoods">搜索</button>
+							<input type="text" style="display: none;">
+							<input type="text" id="autocomplete" class="input-error input-xxlarge" @keydown.prevent.enter="searchGoods" v-model.trim="keyword"/>
+							<button class="sui-btn btn-xlarge btn-danger" id="searchbtn" type="button" @click.prevent.enter="searchGoods">搜索</button>
 						</form>
 					</div>
 				</div>
@@ -63,11 +64,13 @@
                 sessionStorage.removeItem('userName')
             },
 			searchGoods(){
+				if(this.$route.params.q==this.keyword) return
 				if(this.keyword.length==0){
 					this.$message.success('搜索内容不能为空')
 					return
 				}
 				this.$router.push('/search/'+this.keyword+'')
+				return 
 			}
         },
         mounted(){

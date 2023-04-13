@@ -13,7 +13,7 @@
       <div class="cart-body">
         <ul class="cart-list" v-for="item in goodsList" :key="item.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" v-model="item.checked">
+            <input type="checkbox" name="chk_list" v-model="item.isChecked" @click="checkout($event,item.skuId)">
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl">
@@ -41,12 +41,12 @@
     </div>
     <div class="cart-tool">
       <div class="select-all">
-        <input class="chooseAll" type="checkbox" @change="allCheck">
+        <input class="chooseAll" type="checkbox" :checked="allChecked" @click="allCheck">
         <span>全选</span>
       </div>
       <div class="option">
         <a href="#none">删除选中的商品</a>
-        <a href="#none">移到我的关注</a>
+        <a href="#none" @click.prevent="$message.success('移到我的关注')">移到我的关注</a>
         <a href="#none">清除下柜商品</a>
       </div>
       <div class="money-box">
@@ -57,10 +57,20 @@
           <i class="summoney">{{ priceSum }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank">结算</a>
+          <a class="sum-btn" href="###" target="_blank" @click.prevent="payVisible=true">结算</a>
         </div>
       </div>
     </div>
+
+    <el-dialog
+  title="提示"
+  :visible.sync="payVisible"
+  width="30%"
+  :before-close="handleClose">
+  <img src="../../images/erweima.gif" width="100%" alt="">
+  <span>支付{{ goodsSum }}元</span>
+</el-dialog>
+
   </div>
 </template>
 
@@ -69,20 +79,39 @@
     name: 'ShopCart',
     data(){
       return {
+        payVisible:false,
+        timer:undefined,
         goodsList:[],
+        allCheckbox:false,
       }
     },
     methods:{
       allCheck(e){
         this.goodsList.forEach(item=>{
-          item.checked = e.target.checked
+          item.isChecked = e.target.checked?1:0
         })
+      },
+      checkout(e,id){
+        if(this.timer){
+          clearTimeout(this.timer)
+        }
+        this.timer=setTimeout(()=>{
+          this.$axios({
+            method:'get',
+            url:`/api/cart/checkCart/${id}/${e.target.checked?'1':'0'}`
+          }).then(res=>{
+            console.log(res);
+          })
+        },1500)
+      },
+      pay(){
+
       }
     },
     computed:{
       priceSum(){
         var arr = this.goodsList.filter(item=>{
-          return item.checked
+          return item.isChecked
         })
         var sum = 0
         arr.forEach(item=>{
@@ -92,7 +121,7 @@
       },
       goodsSum(){
         var arr = this.goodsList.filter(item=>{
-          return item.checked
+          return item.isChecked
         })
         var sum = 0
         arr.forEach(item=>{
@@ -100,7 +129,17 @@
         })
         return sum
       },
-     
+      allChecked(){
+        var arr = []
+        arr = this.goodsList.filter(item=>{
+          return item.isChecked==0
+        })
+        if(arr.length==0&&this.goodsList[0]){
+          return true
+        }
+        return false
+        
+      }
     },
     mounted(){
       this.$axios({
@@ -108,9 +147,6 @@
         url:'/api/cart/cartList'
       }).then(res=>{
         this.goodsList = res.data.data[0].cartInfoList
-        this.goodsList.forEach(item=>{
-          item.checked=false
-        })
         console.log(this.goodsList);
       })
     }

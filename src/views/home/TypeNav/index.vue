@@ -19,17 +19,17 @@
 
           <div class="item bo" v-for="item in navList" :key="item.categoryId">
             <h3>
-              <a href="">{{ item.categoryName }}</a>
+              <a href="" @click.prevent="searchList(item.categoryName)">{{ item.categoryName }}</a>
             </h3>
             <div class="item-list clearfix">
               <div class="subitem">
                 <dl class="fore" v-for="item1 in item.categoryChild" :key="item1.categoryId">
                   <dt>
-                    <a href="">{{ item1.categoryName }}</a>
+                    <a href="" @click.prevent="searchList(item1.categoryName)">{{ item1.categoryName }}</a>
                   </dt>
                   <dd>
                     <em  v-for="item2 in item1.categoryChild" :key="item2.categoryId">
-                      <a href="">{{ item2.categoryName }}</a>
+                      <a href="" @click.prevent="searchList(item2.categoryName)">{{ item2.categoryName }}</a>
                     </em>
                   </dd>
                 </dl>
@@ -52,7 +52,13 @@ export default {
     }
   },
   methods:{
-
+    searchList(e){
+      var ipt = document.querySelector('#autocomplete')
+      ipt.value=e
+      console.log(encodeURI(e));
+      var str = encodeURIComponent(e)
+      this.$router.push('/search/'+str+'')
+    }
   },
   mounted(){
     this.$axios({
