@@ -62,6 +62,13 @@ export default {
         this.navList=res.data.data
         console.log(res.data.data);
       })
+      var nav = document.querySelector('.all'),content = document.querySelector('.sort')
+      nav.addEventListener('mouseenter',function(){
+        content.style.display = 'block'
+      })
+      content.addEventListener('mouseleave',function(){
+        content.style.display = 'none'
+      })
   }
 }
 </script>
@@ -107,9 +114,9 @@ export default {
       width: 210px;
       min-height: 461px;
       position: absolute;
-      // background: #fafafa;
       z-index: 999;
       background: rgb(225, 37, 25);
+      display: none;
       .all-sort-list2 {
         .item {
             &:hover h3{

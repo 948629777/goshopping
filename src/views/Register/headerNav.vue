@@ -38,8 +38,8 @@
 					</h1>
 					<div class="searchArea">
 						<form action="###" class="searchForm">
-							<input type="text" id="autocomplete" class="input-error input-xxlarge" />
-							<button class="sui-btn btn-xlarge btn-danger" type="button">搜索</button>
+							<input type="text" id="autocomplete" class="input-error input-xxlarge" v-model.trim="keyword"/>
+							<button class="sui-btn btn-xlarge btn-danger" type="button" @click="searchGoods">搜索</button>
 						</form>
 					</div>
 				</div>
@@ -53,7 +53,7 @@
         name:'headernav',
         data(){
             return {
-                
+                keyword:'手机'
             }
         },
         methods:{
@@ -61,12 +61,28 @@
                 this.$store.commit('noLogin')
                 sessionStorage.removeItem('token')
                 sessionStorage.removeItem('userName')
-            }
+            },
+			searchGoods(){
+				if(this.keyword.length==0){
+					this.$message.success('搜索内容不能为空')
+					return
+				}
+				this.$router.push('/search/'+this.keyword+'')
+			}
         },
         mounted(){
             if(sessionStorage.getItem('userName')){
                 this.$store.commit('isLogin')
             }
+			/* this.$axios({
+        method:'post',
+        url:'/api/list',
+		data:{
+			keyword:this.keyword
+		}
+      }).then(res=>{
+        console.log(res.data.data);
+      }) */
         }
     }
 </script>

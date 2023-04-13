@@ -41,7 +41,6 @@
   import ListContainer from './ListContainer/ListContainer'
   import Rank from './Rank/Rank'
   import TodayRecommend from './TodayRecommend/TodayRecommend'
-  import TypeNav from '../TypeNav'
   export default {
     name: 'Home',
     data(){
@@ -62,8 +61,7 @@
       Like,
       ListContainer,
       Rank,
-      TodayRecommend,
-      TypeNav
+      TodayRecommend
     }
   }
 </script>

@@ -4,7 +4,9 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import nav from './views/Register/headerNav.vue'
+import TypeNav from './views/home/TypeNav'
 Vue.component('header-nav',nav)
+Vue.component('TypeNav',TypeNav)
 // 导入组件库
 import ElementUI from 'element-ui';
 // 导入组件相关样式
