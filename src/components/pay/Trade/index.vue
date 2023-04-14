@@ -117,8 +117,8 @@
         subForm:{
           consignee:'徐立',
           consigneeTel:'15111057735',
-          deliveryAddress:'湖南长沙',
-          paymentWay:'online',/* 支付方式 */
+          deliveryAddress:'长沙',
+          paymentWay:'ONLINE',/* 支付方式 */
           orderComment:'这里写的是备注',
           orderDetailList:[]
         }
@@ -140,20 +140,20 @@
           method:'get',
           url:'/api/order/auth/trade'
         }).then(res=>{
-          console.log(res);
           this.tradeNo = res.data.data.tradeNo
-          this.subForm.orderDetailList=this.goodsList
-          console.log('单号',this.tradeNo,this.subForm);
+          this.subForm.orderDetailList = []
+          this.goodsList.forEach(item=>{
+            this.subForm.orderDetailList.push({id:null,orderId:null,skuId:item.skuId,skuName:item.skuName,imgUrl:item.imgUrl,orderPrice:item.skuPrice,skuNum:item.skuNum,hasStock:null})
+          })
         this.$axios({
           method:'post',
           url:`/api/order/auth/submitOrder?tradeNo=${this.tradeNo}`,
           data:this.subForm
         }).then(res=>{
-          console.log(res);
           if(res.data.code===200){
             this.$message.success('提交成功，将跳转至支付页面')
             setTimeout(()=>{
-              this.$router.push('/orders')
+              this.$router.push('/orders/'+res.records[0].id)
             },1500)
           }else{
             this.$message.error(res.data.message)

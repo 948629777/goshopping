@@ -62,6 +62,16 @@
                 this.$store.commit('noLogin')
                 sessionStorage.removeItem('token')
                 sessionStorage.removeItem('userName')
+				this.$axios({
+					method:'get',
+					url:'/api/user/passport/logout'
+				}).then(res=>{
+					if(res.data.code===200){
+						this.$message.success('退出登录')
+					}else{
+						this.$message.error(res.data.message)
+					}
+				})
             },
 			searchGoods(){
 				if(this.$route.params.q==this.keyword) return

@@ -303,10 +303,8 @@
       getData(){
         this.$axios({
           method:'get',
-          url:`/api/order/auth/${this.pageForm.page}/${this.pageForm.limit}`
+          url:`/api/payment/weixin/createNative/${this.$route.params.ordersId}`
         }).then(res=>{
-          this.total=res.data.data.total
-          this.ordersList=res.data.data.records
           console.log(res.data.data);
         })
       }

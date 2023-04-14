@@ -24,7 +24,7 @@ const routes = [
   {path:'/addgoods/:id',component:add},
   {path:'/pay',component:pay},
   {path:'/paysuccess',component:paysuccess},
-  {path:'/orders',component:center},
+  {path:'/orders/:ordersId',component:center},
   {path:'/trade',component:trade}
 ]
 
