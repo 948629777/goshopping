@@ -45,7 +45,7 @@
       })
       },
       toDtaail(){
-        this.$router.push('/addgoods/'+this.$route.params.id+'')
+        this.$router.push('/detail/'+this.$route.params.id+'')
       }
     }
   }

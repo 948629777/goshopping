@@ -46,7 +46,7 @@
           </div>
           <div class="goods-list">
             <ul class="yui3-g">
-              <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id" @click.prevent.stop="$router.push('/detail/'+item.skuId+'')">
+              <li class="yui3-u-1-5" v-for="item in goodsList" :key="item.id" @click.prevent.stop="$router.push('/detail/'+item.id+'')">
                 <div class="list-wrap">
                   <div class="p-img">
                     <a href="item.html" target="_parent"><img :src="item.defaultImg" /></a>
@@ -64,7 +64,7 @@
                     <i class="command">已有<span>2000</span>人评价</i>
                   </div>
                   <div class="operate">
-                    <a href="###" @click.prevent="toCar(item.skuId)" target="_parent" class="sui-btn btn-bordered btn-danger">加入购物车</a>
+                    <a href="###" @click.prevent="toCar(item.id)" target="_parent" class="sui-btn btn-bordered btn-danger">加入购物车</a>
                     <a href="javascript:void(0);" class="sui-btn btn-bordered">收藏</a>
                   </div>
                 </div>

@@ -14,7 +14,7 @@
         <p v-if="goodsList[0]">空空如也</p>
         <ul class="cart-list" v-for="item in goodsList" :key="item.id">
           <li class="cart-list-con1">
-            <input type="checkbox" name="chk_list" v-model="item.isChecked" @click="checkout($event,item.skuId)">
+            <input type="checkbox" name="chk_list" v-model="item.isChecked" @click="checkout(item.skuId,$event)">
           </li>
           <li class="cart-list-con2">
             <img :src="item.imgUrl">
@@ -27,7 +27,7 @@
             <span class="price">{{ item.skuPrice }}</span>
           </li>
           <li class="cart-list-con5">
-            <el-input-number v-model="item.skuNum" size="mini" :min="1" :max="10" label="描述文字" @blur="editGoods(item.skuId,item.skuNum)"></el-input-number>
+            <el-input-number v-model="item.skuNum" size="mini" :min="1" :max="99" label="描述文字" @change="editGoods(item.skuId,$event)"></el-input-number>
           </li>
           <li class="cart-list-con6">
             <span class="sum">{{ item.skuNum*item.skuPrice }}</span>
@@ -58,7 +58,7 @@
           <i class="summoney">{{ priceSum }}</i>
         </div>
         <div class="sumbtn">
-          <a class="sum-btn" href="###" target="_blank" @click.prevent="payVisible=true">结算</a>
+          <a class="sum-btn" href="###" target="_blank" @click.prevent="toOrders">结算</a>
         </div>
       </div>
     </div>
@@ -80,10 +80,12 @@
     name: 'ShopCart',
     data(){
       return {
+        editTimer:undefined,
         payVisible:false,
         timer:undefined,
         goodsList:[],
         allCheckbox:false,
+        num:[]
       }
     },
     methods:{
@@ -93,7 +95,11 @@
         url:'/api/cart/cartList'
       }).then(res=>{
         this.goodsList = res.data.data[0].cartInfoList
-        console.log(this.goodsList);
+        this.num = []
+        this.goodsList.forEach(item=>{
+          this.num.push({id:item.skuId,num:item.skuNum})
+        })
+        console.log(this.num);
       })
       },
       allCheck(e){
@@ -101,7 +107,7 @@
           item.isChecked = e.target.checked?1:0
         })
       },
-      checkout(e,id){
+      checkout(id,e){
         if(this.timer){
           clearTimeout(this.timer)
         }
@@ -146,13 +152,31 @@
           });          
         });
       },
-      editGoods(id,num){
-        this.$axios({
+      editGoods(id,e){
+        if(this.editTimer){
+          clearTimeout(this.editTimer)
+        }
+        this.editTimer=setTimeout(_=>{
+          var index = this.num.find(item=>{
+            return item.id==id&&item
+          })
+        let num = e-index.num
+          this.$axios({
           method:'post',
           url:`/api/cart/addToCart/${id}/${num}`
         }).then(res=>{
-          console.log(res);
+          if(res.data.code===200){
+            this.$message.success('数据已提交，如有疑问请联系客服')
+          }else{
+            this.$message.error(res.data.message)
+          }
+          this.editTimer=undefined
         })
+        },1000)
+      },
+      toOrders(){
+        // 去提交订单页
+        this.$router.push('/trade')
       }
     },
     computed:{

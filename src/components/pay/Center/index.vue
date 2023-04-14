@@ -181,7 +181,7 @@
             </div>
             <div class="choose-order">
               <div class="pagination">
-                <ul>
+                <!-- <ul>
                   <li class="prev disabled">
                     <a href="javascript:">«上一页</a>
                   </li>
@@ -201,10 +201,16 @@
                   <li class="next disabled">
                     <a href="javascript:">下一页»</a>
                   </li>
-                </ul>
-                <div>
-                  <span>&nbsp;&nbsp;&nbsp;&nbsp;共2页&nbsp;</span>
-                </div>
+                </ul> -->
+                <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="pageForm.page"
+      :page-sizes="[1, 3, 5, 10]"
+      :page-size="pageForm.limit"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
               </div>
             </div>
           </div>
@@ -277,6 +283,37 @@
 <script>
   export default {
     name: '',
+    data(){
+      return {
+        total:1,
+        pageForm:{
+          page:1,
+          limit:10
+        },
+        ordersList:[]
+      }
+    },
+    methods:{
+      handleSizeChange(){
+
+      },
+      handleCurrentChange(){
+        
+      },
+      getData(){
+        this.$axios({
+          method:'get',
+          url:`/api/order/auth/${this.pageForm.page}/${this.pageForm.limit}`
+        }).then(res=>{
+          this.total=res.data.data.total
+          this.ordersList=res.data.data.records
+          console.log(res.data.data);
+        })
+      }
+    },
+    mounted(){
+      this.getData()
+    }
   }
 </script>
 

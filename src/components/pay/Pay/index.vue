@@ -8,7 +8,7 @@
         </h4>
         <div class="paymark">
           <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>145687</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥17,654</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{ orders.originalTotalAmount }}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -84,6 +84,20 @@
 <script>
   export default {
     name: 'Pay',
+    data(){
+      return {
+        orders:{}
+      }
+    },
+    mounted(){
+      this.$axios({
+        method:'get',
+        url:'/api/order/auth/trade'
+      }).then(res=>{
+        console.log(res);
+        this.orders = res.data.data
+      })
+    }
   }
 </script>
 

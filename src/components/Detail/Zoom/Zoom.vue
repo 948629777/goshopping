@@ -14,11 +14,7 @@
     name: "Zoom",
     props:['info'],
     methods:{
-      
-    },
-    methods:{
       setFD(){
-        window.addEventListener('load', function () {
         var preview_img = document.querySelector('.spec-preview')
         var mask = document.querySelector('.mask')
         var big = document.querySelector('.big')
@@ -34,8 +30,9 @@
         //鼠标移动的时候，遮挡层的盒子跟着鼠标来走
         preview_img.addEventListener('mousemove', function (e) {
           // 计算鼠标在小盒子内的坐标
-          var x = e.pageX - this.offsetLeft
-          var y = e.pageY - 245
+          var rect = preview_img.getBoundingClientRect()
+          var x = e.clientX - rect.left
+          var y = e.clientY - rect.top
           // mask 移动的距离
           var maskX = x - mask.offsetWidth / 2
           var maskY = y - mask.offsetHeight / 2
@@ -65,14 +62,11 @@
           bigIMg.style.left = -bigX + 'px'
           bigIMg.style.top = -bigY + 'px'
         })
-      })
+      
       }
     },
     mounted(){
       // 放大镜
-      this.setFD()
-    },
-    activated(){
       this.setFD()
     }
   }

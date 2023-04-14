@@ -52,8 +52,12 @@
 
     },
     mounted(){
-      // /api/product/getBaseCategoryList
-      
+      try {
+        var nav = document.querySelector('.sort')
+        nav.classList.add('show')
+      } catch (error) {
+        console.log(error);
+      }
     },
     components: {
       Brand,

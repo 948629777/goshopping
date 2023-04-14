@@ -79,6 +79,9 @@ export default {
 </script>
 
 <style  lang="less" scoped>
+.show{
+  display: block!important;;
+}
 .type-nav {
   border-bottom: 2px solid #e1251b;
 

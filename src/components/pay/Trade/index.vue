@@ -3,16 +3,17 @@
     <h3 class="title">填写并核对订单信息</h3>
     <div class="content">
       <h5 class="receive">收件人信息</h5>
-      <div class="address clearFix">
-        <span class="username selected">张三</span>
+     
+      <div class="address clearFix" v-for="item,index in data" :key="index">
+        <span :class="{username:true,selected:isChecked==index}" @click="curCheck(index)">{{ item }}</span>
         <p>
           <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
           <span class="s2">15010658793</span>
-          <span class="s3">默认地址</span>
+          <span class="s3" v-if="index==0">默认地址</span>
         </p>
       </div>
-      <div class="address clearFix">
-        <span class="username selected">李四</span>
+      <!-- <div class="address clearFix">
+        <span class="username">李四</span>
         <p>
           <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
           <span class="s2">13590909098</span>
@@ -20,13 +21,13 @@
         </p>
       </div>
       <div class="address clearFix">
-        <span class="username selected">王五</span>
+        <span class="username">王五</span>
         <p>
           <span class="s1">北京市昌平区宏福科技园综合楼6层</span>
           <span class="s2">18012340987</span>
           <span class="s3">默认地址</span>
         </p>
-      </div>
+      </div> -->
       <div class="line"></div>
       <h5 class="pay">支付方式</h5>
       <div class="address clearFix">
@@ -45,34 +46,18 @@
       </div>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix">
+        <ul class="list clearFix" v-for="item in goodsList" :key="item.id">
           <li>
-            <img src="./images/goods.png" alt="">
+            <img :src="item.imgUrl" width="50px" height="50px" alt="">
           </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
+          <li style="min-width: 400px;">
+            <p>{{ item.skuName }}</p>
             <h4>7天无理由退货</h4>
           </li>
-          <li>
-            <h3>￥5399.00</h3>
+          <li style="min-width: 60px;">
+            <h3>￥{{item.skuPrice}}</h3>
           </li>
-          <li>X1</li>
-          <li>有货</li>
-        </ul>
-        <ul class="list clearFix">
-          <li>
-            <img src="./images/goods.png" alt="">
-          </li>
-          <li>
-            <p>
-              Apple iPhone 6s (A1700) 64G 玫瑰金色 移动联通电信4G手机硅胶透明防摔软壳 本色系列</p>
-            <h4>7天无理由退货</h4>
-          </li>
-          <li>
-            <h3>￥5399.00</h3>
-          </li>
-          <li>X1</li>
+          <li>X{{ item.skuNum }}</li>
           <li>有货</li>
         </ul>
       </div>
@@ -91,8 +76,8 @@
     <div class="money clearFix">
       <ul>
         <li>
-          <b><i>1</i>件商品，总商品金额</b>
-          <span>¥5399.00</span>
+          <b><i>{{ goodsSum }}</i>件商品，总商品金额</b>
+          <span>¥{{ priceSum }}</span>
         </li>
         <li>
           <b>返现：</b>
@@ -105,7 +90,7 @@
       </ul>
     </div>
     <div class="trade">
-      <div class="price">应付金额:　<span>¥5399.00</span></div>
+      <div class="price">应付金额:　<span>¥{{ priceSum }}</span></div>
       <div class="receiveInfo">
         寄送至:
         <span>北京市昌平区宏福科技园综合楼6层</span>
@@ -114,7 +99,7 @@
       </div>
     </div>
     <div class="sub clearFix">
-      <router-link class="subBtn" to="/pay">提交订单</router-link>
+      <a class="subBtn" @click.prevent="subOrders">提交订单</a>
     </div>
   </div>
 </template>
@@ -122,11 +107,101 @@
 <script>
   export default {
     name: 'Trade',
+    data(){
+      return {
+        goodsList:[],
+        radio1:'张三',
+        data:['张三','李四','王五'],
+        isChecked:0,
+        tradeNo:'',
+        subForm:{
+          consignee:'徐立',
+          consigneeTel:'15111057735',
+          deliveryAddress:'湖南长沙',
+          paymentWay:'online',/* 支付方式 */
+          orderComment:'这里写的是备注',
+          orderDetailList:[]
+        }
+      }
+    },
+    methods:{
+      getCar(){//获取选中的商品列表
+        this.$axios({
+        method:'get',
+        url:'/api/cart/cartList'
+      }).then(res=>{
+        this.goodsList = res.data.data[0].cartInfoList.filter(item=>{
+          return item.isChecked==1
+        })
+      })
+      },
+      gettradeNo(){//获取交易单号并提交数据
+        this.$axios({
+          method:'get',
+          url:'/api/order/auth/trade'
+        }).then(res=>{
+          console.log(res);
+          this.tradeNo = res.data.data.tradeNo
+          this.subForm.orderDetailList=this.goodsList
+          console.log('单号',this.tradeNo,this.subForm);
+        this.$axios({
+          method:'post',
+          url:`/api/order/auth/submitOrder?tradeNo=${this.tradeNo}`,
+          data:this.subForm
+        }).then(res=>{
+          console.log(res);
+          if(res.data.code===200){
+            this.$message.success('提交成功，将跳转至支付页面')
+            setTimeout(()=>{
+              this.$router.push('/orders')
+            },1500)
+          }else{
+            this.$message.error(res.data.message)
+          }
+        })
+        })
+      }
+      ,
+      curCheck(index){
+        this.isChecked = index
+      },
+      subOrders(){
+       this.gettradeNo()
+      }
+    },
+    mounted(){
+      this.getCar()
+    },
+    computed:{
+      priceSum(){
+        var arr = this.goodsList.filter(item=>{
+          return item.isChecked
+        })
+        var sum = 0
+        arr.forEach(item=>{
+          sum+=item.skuNum*item.skuPrice
+        })
+        return sum
+      },
+      goodsSum(){
+        var arr = this.goodsList.filter(item=>{
+          return item.isChecked
+        })
+        var sum = 0
+        arr.forEach(item=>{
+          sum+=item.skuNum
+        })
+        return sum
+      },
+    }
   }
 </script>
 
 <style lang="less" scoped>
-  .trade-container {
+span{
+  cursor: pointer;
+}
+.trade-container {
     .title {
       width: 1200px;
       margin: 0 auto;

@@ -400,7 +400,7 @@
         }).then(res=>{
           if(res.data.code==200){
             this.$message.success('添加成功，请前往购物车查看您的商品')
-            this.$router.push('/addgoods/'+this.info.skuId+'')
+            this.$router.push('/addgoods/'+this.info.id+'')
           }else{
             this.$message.error('添加失败')
           }
