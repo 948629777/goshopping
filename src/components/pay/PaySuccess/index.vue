@@ -8,7 +8,7 @@
       </h3>
       <div class="paydetail">
         <p class="button">
-          <router-link class="btn-look" to="/center">查看订单</router-link>
+          <router-link class="btn-look" to="/orders">查看订单</router-link>
           <router-link class="btn-goshop" to="/">继续购物</router-link>
         </p>
       </div>
@@ -20,6 +20,14 @@
 <script>
   export default {
     name: 'PaySuccess',
+    beforeRouteEnter(to, from, next) {
+		// 在组件进入前进行拦截
+		if (from.path !== '/pay') {
+			next('/car')
+		} else {
+			next()
+		}
+	},
   }
 </script>
 

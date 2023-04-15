@@ -7,8 +7,8 @@
           <span class="success-info">订单提交成功，请您及时付款，以便尽快为您发货~~</span>
         </h4>
         <div class="paymark">
-          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>145687</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{ orders.originalTotalAmount }}</em></span>
+          <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>{{ $route.params.id }}</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{ totalFee }}</em></span>
         </div>
       </div>
       <div class="checkout-info">
@@ -31,8 +31,7 @@
         </div>
         <div class="step-cont">
           <ul class="payType">
-            <li><img src="./images/pay2.jpg"></li>
-            <li><img src="./images/pay3.jpg"></li>
+            <li v-for="item,index in imgList.slice(0,2)" :key="item" :class="{active:isCheck==index}" @click="checkout(index)"><img :src="item"></li>
           </ul>
 
         </div>
@@ -44,20 +43,7 @@
           </div>
           <div class="step-cont">
             <ul class="payType">
-              <li><img src="./images/pay10.jpg"></li>
-              <li><img src="./images/pay11.jpg"></li>
-              <li><img src="./images/pay12.jpg"></li>
-              <li><img src="./images/pay13.jpg"></li>
-              <li><img src="./images/pay14.jpg"></li>
-              <li><img src="./images/pay15.jpg"></li>
-              <li><img src="./images/pay16.jpg"></li>
-              <li><img src="./images/pay17.jpg"></li>
-              <li><img src="./images/pay18.jpg"></li>
-              <li><img src="./images/pay19.jpg"></li>
-              <li><img src="./images/pay20.jpg"></li>
-              <li><img src="./images/pay21.jpg"></li>
-              <li><img src="./images/pay22.jpg"></li>
-
+              <li v-for="item,index in imgList.slice(2)" :key="item" :class="{active:isCheck==index+2}" @click="checkout(index+2)"><img :src="item"></li>
             </ul>
           </div>
 
@@ -65,7 +51,7 @@
         <div class="hr"></div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <a class="btn" @click.prevent="pay"  v-loading.fullscreen.lock="fullscreenLoading" element-loading-text="支付中">立即支付</a>
         </div>
         <div class="otherpay">
           <div class="step-tit">
@@ -82,26 +68,66 @@
 </template>
 
 <script>
+import { Loading } from 'element-ui';
   export default {
     name: 'Pay',
     data(){
       return {
-        orders:{}
+        orders:{},
+        totalFee:0,
+        imgList:[],
+        isCheck:0,
+        fullscreenLoading:false,
       }
     },
     mounted(){
-      this.$axios({
-        method:'get',
-        url:'/api/order/auth/trade'
-      }).then(res=>{
-        console.log(res);
-        this.orders = res.data.data
-      })
-    }
+      this.getData()
+      for(var i=2;i<23;i++){
+        if(i==4) i=10
+        this.imgList.push(('/images/pay'+i+'.jpg'))
+      }
+    },
+    methods:{
+      getData(){
+        this.$axios({
+          method:'get',
+          url:`/api/payment/weixin/createNative/${this.$route.params.id}`
+        }).then(res=>{
+          console.log(res);
+          this.totalFee=res.data.data.totalFee
+        })
+      },
+      checkout(i){
+        this.isCheck=i
+      },
+      pay(){
+        this.fullscreenLoading = true;
+        setTimeout(_=>{
+          this.fullscreenLoading = false
+          this.$message({
+            type:'success',
+            message:'支付成功',
+            offset:400,
+          })
+        this.$router.push('/paysuccess')
+        },1500)
+      }
+    },
+    beforeRouteEnter(to, from, next) {
+		// 在组件进入前进行拦截
+		if (from.path !== '/trade') {
+			next('/car')
+		} else {
+			next()
+		}
+	},
   }
 </script>
 
 <style lang="less" scoped>
+.active{
+  border: 1px solid red!important;;
+}
   .pay-main {
     margin-bottom: 20px;
 

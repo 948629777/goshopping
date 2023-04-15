@@ -22,9 +22,9 @@ const routes = [
   { path: '/search/:q', component: search },
   { path: '/car', component: shopCar },
   {path:'/addgoods/:id',component:add},
-  {path:'/pay',component:pay},
+  {path:'/pay/:id',component:pay},
   {path:'/paysuccess',component:paysuccess},
-  {path:'/orders/:ordersId',component:center},
+  {path:'/orders',component:center},
   {path:'/trade',component:trade}
 ]
 
@@ -34,6 +34,7 @@ const router = new VueRouter({
 // 路由守卫
 router.beforeEach((to, from, next) => {
   // to要去的页面 from从哪里来 next放行 
+  // 购物车页守卫
   if (to.path === '/car') {
     var tokenStr = sessionStorage.getItem('token')
     if (!tokenStr) {
@@ -44,5 +45,18 @@ router.beforeEach((to, from, next) => {
   }else{
     next()
   }
+// 我的订单页守卫
+if (to.path === '/orders') {
+  var tokenStr = sessionStorage.getItem('token')
+  if (!tokenStr) {
+    Vue.prototype.$message.error('需要先登录认证')
+    next('/login')
+  }
+  else next()
+}else{
+  next()
+}
+
+
 })
 export default router
