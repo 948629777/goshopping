@@ -99,7 +99,6 @@
         this.goodsList.forEach(item=>{
           this.num.push({id:item.skuId,num:item.skuNum})
         })
-        console.log(this.num);
       })
       },
       allCheck(e){

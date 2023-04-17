@@ -22,7 +22,7 @@
     name: 'PaySuccess',
     beforeRouteEnter(to, from, next) {
 		// 在组件进入前进行拦截
-		if (from.path !== '/pay') {
+		if (from.name !== 'pay') {
 			next('/car')
 		} else {
 			next()

@@ -22,7 +22,7 @@ const routes = [
   { path: '/search/:q', component: search },
   { path: '/car', component: shopCar },
   {path:'/addgoods/:id',component:add},
-  {path:'/pay/:id',component:pay},
+  {path:'/pay/:id',component:pay,name:'pay'},
   {path:'/paysuccess',component:paysuccess},
   {path:'/orders',component:center},
   {path:'/trade',component:trade}

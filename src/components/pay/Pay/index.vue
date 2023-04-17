@@ -93,7 +93,6 @@ import { Loading } from 'element-ui';
           method:'get',
           url:`/api/payment/weixin/createNative/${this.$route.params.id}`
         }).then(res=>{
-          console.log(res);
           this.totalFee=res.data.data.totalFee
         })
       },

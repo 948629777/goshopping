@@ -394,6 +394,10 @@
     },
     methods:{
       addGoods(){
+        if(!sessionStorage.getItem('token')){
+          this.$router.push('/login')
+          return
+        }
         this.$axios({
           method:'post',
           url:'/api/cart/addToCart/'+this.$route.params.id+'/'+this.selectForm.num+''

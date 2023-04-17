@@ -75,7 +75,10 @@
             </div>
             <div class="orders">
 
-              <table class="order-item" v-for="item in ordersList" :key="item.id">
+              <table class="order-item" v-for="item in ordersList" :key="item.id"  v-loading="loading"
+    element-loading-text="拼命加载中"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)">
                 <thead>
                   <tr>
                     <th colspan="5">
@@ -217,7 +220,8 @@
           page:1,
           limit:10
         },
-        ordersList:[]
+        ordersList:[],
+        loading: false,
       }
     },
     methods:{
@@ -235,8 +239,8 @@
           url:`/api/order/auth/${this.pageForm.page}/${this.pageForm.limit}`
         }).then(res=>{
           if(res.data.code===200){
-           console.log(res.data.data.records);
             this.ordersList=res.data.data.records
+            this.total=res.data.data.total
           }
         })
       }

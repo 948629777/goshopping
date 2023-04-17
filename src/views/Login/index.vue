@@ -88,11 +88,12 @@
           data:this.loginForm
         }).then(res=>{
           if(res.data.code==200){
-            this.$message.success('登陆成功,即将跳转到首页')
+            this.$message.success('登陆成功,即将跳转')
             sessionStorage.setItem('token',res.data.data.token)
             sessionStorage.setItem('userName',this.loginForm.phone)
             setTimeout(()=>{
-              this.$router.push('/')
+              // this.$router.push('/')
+              history.go(-1)
             },1500)
           }else{
             this.$message.error(res.data.message)

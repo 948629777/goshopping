@@ -38,6 +38,7 @@
         method:'get',
         url:'/api/cart/cartList'
       }).then(res=>{
+        console.log(res);
         this.list = res.data.data[0].cartInfoList.filter(item=>{
           return item.skuId==this.$route.params.id
         })
